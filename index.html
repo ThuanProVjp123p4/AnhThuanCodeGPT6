@@ -59,9 +59,6 @@
         .invoice-table th {
             font-weight: 600;
             background-color: #f8fafc;
-            position: sticky; /* Cố định tiêu đề bảng */
-            top: 0;
-            z-index: 10;
         }
         .invoice-table .text-right {
             text-align: right;
@@ -116,11 +113,11 @@
             max-width: 400px;
         }
         
-        /* Styles for printing */
+        /* CSS cho in ấn để in toàn bộ nội dung */
         @media print {
             body {
                 background: none;
-                font-size: 8pt; /* Reduced font size for printing */
+                font-size: 8pt;
                 color: black;
                 margin: 0;
                 padding: 0;
@@ -139,7 +136,14 @@
             }
             .invoice-table th, .invoice-table td {
                 border-color: #e2e8f0 !important;
-                padding: 0.1rem; /* Reduced padding for printing */
+                padding: 0.1rem;
+            }
+            #invoice-wrapper-screen {
+                overflow: visible !important;
+                height: auto !important;
+            }
+            .invoice-table thead {
+                display: table-header-group;
             }
         }
     </style>
@@ -253,9 +257,10 @@
                 <p class="text-sm"><span class="font-semibold">Khách hàng:</span> <span id="customer-name-display"></span></p>
                 <p class="text-sm"><span class="font-semibold">Điện thoại:</span> <span id="customer-phone-display"></span></p>
             </div>
-            <!-- Thêm lớp overflow-y-auto và h-[60vh] cho cuộn riêng -->
-            <div id="invoice" class="bg-gray-50 rounded-lg p-2 overflow-y-auto h-[60vh]">
-                <table class="w-full invoice-table text-sm">
+            
+            <!-- Vùng chứa có thể cuộn trên màn hình -->
+            <div id="invoice-wrapper-screen" class="bg-gray-50 rounded-lg p-2 overflow-y-auto h-[60vh]">
+                <table id="invoice-table" class="w-full invoice-table text-sm">
                     <thead>
                         <tr>
                             <th class="w-[6%] text-center px-4">STT</th>
@@ -273,6 +278,7 @@
                     </tbody>
                 </table>
             </div>
+
             <div class="mt-2 pt-2 border-t border-gray-300">
                 <div class="flex justify-between items-center text-lg font-bold">
                     <span>Tổng cộng:</span>
@@ -361,7 +367,7 @@
     const modalButtons = document.getElementById('modalButtons');
     
     // Thêm biến để truy cập div cuộn hóa đơn
-    const invoiceScrollDiv = document.getElementById('invoice');
+    const invoiceScrollDiv = document.getElementById('invoice-wrapper-screen');
 
     const invoiceItems = document.getElementById('invoice-items');
     const totalPriceSpan = document.getElementById('total-price');
